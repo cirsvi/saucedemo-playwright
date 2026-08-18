@@ -1,6 +1,6 @@
-import { LoginPage } from "../pages/loginPage";
-import { CatalogPage } from "../pages/catalogPage";
-import { test, expect } from "@playwright/test"
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/loginPage';
+import { CatalogPage } from '../pages/catalogPage';
 
 test.describe('Login', () => {
     let loginPage : LoginPage;
@@ -21,7 +21,7 @@ test.describe('Login', () => {
     test('SDQA-6: Input invalid credentials', async ({ page }) => {
         await loginPage.login('standard_user1', 'secret_sauce1');
         
-        await expect(loginPage.errorMessage).toContainText("Username and password do not match any user in this service");
+        await expect(loginPage.errorMessage).toContainText('Username and password do not match any user in this service');
         await expect(loginPage.usernameInput).toHaveClass(/error/);
         await expect(loginPage.passwordInput).toHaveClass(/error/);
         await expect(page).toHaveURL(/\/$/);
@@ -30,7 +30,7 @@ test.describe('Login', () => {
     test('SDQA-9: Empty username field', async ({ page }) => {
         await loginPage.login('', 'secret_sauce');
         
-        await expect(loginPage.errorMessage).toContainText("Username is required");
+        await expect(loginPage.errorMessage).toContainText('Username is required');
         await expect(loginPage.usernameInput).toHaveClass(/error/);
         await expect(page).toHaveURL(/\/$/);
     })
@@ -39,7 +39,7 @@ test.describe('Login', () => {
     test('SDQA-10: Empty password field', async ({ page }) => {
         await loginPage.login('standard_user', '');
         
-        await expect(loginPage.errorMessage).toContainText("Password is required");
+        await expect(loginPage.errorMessage).toContainText('Password is required');
         await expect(loginPage.passwordInput).toHaveClass(/error/);
         await expect(page).toHaveURL(/\/$/);
     })
@@ -47,7 +47,7 @@ test.describe('Login', () => {
     test('SDQA-11: Both input fields empty', async ({ page }) => {
         await loginPage.login('', '');
         
-        await expect(loginPage.errorMessage).toContainText("Username is required");
+        await expect(loginPage.errorMessage).toContainText('Username is required');
         await expect(loginPage.usernameInput).toHaveClass(/error/);
         await expect(loginPage.passwordInput).toHaveClass(/error/);
         await expect(page).toHaveURL(/\/$/);
@@ -56,26 +56,24 @@ test.describe('Login', () => {
     test('SDQA-12: Locked out user', async ({ page }) => {
         await loginPage.login('locked_out_user', 'secret_sauce');
         
-        await expect(loginPage.errorMessage).toContainText("Sorry, this user has been locked out.");
+        await expect(loginPage.errorMessage).toContainText('Sorry, this user has been locked out.');
         await expect(loginPage.usernameInput).toHaveClass(/error/);
         await expect(loginPage.passwordInput).toHaveClass(/error/);
         await expect(page).toHaveURL(/\/$/);
     })
 
-    test.fixme('SDQA-13: Client-side: Username input really long string', async () => {
-        // Known bug: no client-side length validation
-        // Bug: SDQA-121
-        // Steps:
-        // 1. User enters a very long string of characters (e.g., 'a' 200+ times) into username field.
-        // Expected: The input field prevents the user from typing more than defined limit of characters (e.g., 50).
+    test.fail('SDQA-13: Client-side: Username input really long string', async () => {
+        test.info().annotations.push({ type: 'bug', description: 'SDQA-121' });
+
+        await loginPage.usernameInput.fill('a'.repeat(200));
+        await expect(loginPage.usernameInput).toHaveValue('a'.repeat(50));
     })
 
-    test.fixme('SDQA-14: Client-side: Password input really long string', async () => {
-        // Known bug: no client-side length validation
-        // Bug: SDQA-120
-        // Steps:
-        // 1. User enters a very long string of characters (e.g., 'a' 200+ times) into password field.
-        // Expected: The input field prevents the user from typing more than defined limit of characters (e.g., 100).
+    test.fail('SDQA-14: Client-side: Password input really long string', async () => {
+        test.info().annotations.push({ type: 'bug', description: 'SDQA-120' });
+
+        await loginPage.passwordInput.fill(('a').repeat(200));
+        await expect(loginPage.passwordInput).toHaveValue('a'.repeat(100));
     })
 
     test.fixme('SDQA-16: Tab navigation', async () => {
@@ -102,5 +100,3 @@ test.describe('Login', () => {
         // Expected: The button changes its appearance by a distinct color; the cursor visibly changes to hand to indicate possible action.
     })
 })
-
-
