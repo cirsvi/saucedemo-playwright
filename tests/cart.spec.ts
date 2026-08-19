@@ -1,13 +1,12 @@
 import { test, expect } from '../fixtures/index';
 import { CatalogPage } from '../pages/catalogPage';
 import { ProductDetailsPage } from '../pages/productDetailsPage';
-import { CartPage } from '../pages/cartPage';
 import { Header } from '../components/header';
+import { PRODUCTS } from '../test-data/products';
 
 test.describe('Shopping Cart', () => {
     let catalogPage: CatalogPage;
     let detailsPage: ProductDetailsPage;
-    let cartPage: CartPage;
     let header: Header;
 
     test.beforeEach(async ({ loggedInPage, page }) => {
@@ -22,7 +21,7 @@ test.describe('Shopping Cart', () => {
 
         test('SDQA-36: Add product from Catalog Page', async () => {
             const product = catalogPage.getProductCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
             await product.addToCart();
 
@@ -33,7 +32,7 @@ test.describe('Shopping Cart', () => {
 
         test('SDQA-41: Remove product from Catalog Page', async () => {
             const product = catalogPage.getProductCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
             await product.addToCart();
             await expect(header.cartIconBadge).toContainText('1');
@@ -48,7 +47,7 @@ test.describe('Shopping Cart', () => {
             page,
         }) => {
             const product = catalogPage.getProductCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
             await product.addToCart();
             await expect(product.addToCartButton).not.toBeVisible();
@@ -66,7 +65,7 @@ test.describe('Shopping Cart', () => {
             page,
         }) => {
             const product = catalogPage.getProductCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
             await product.addToCart();
             await expect(header.cartIconBadge).toContainText('1');
@@ -76,7 +75,7 @@ test.describe('Shopping Cart', () => {
             await expect(header.cartIconBadge).toContainText('1');
 
             const refreshedProduct = catalogPage.getProductCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
             await expect(refreshedProduct.removeButton).toBeVisible();
             await expect(refreshedProduct.addToCartButton).not.toBeVisible();
@@ -93,7 +92,7 @@ test.describe('Shopping Cart', () => {
     test.describe('From Details Product Page', () => {
         test.beforeEach(async ({ page }) => {
             detailsPage = new ProductDetailsPage(page);
-            await detailsPage.goTo(4);
+            await detailsPage.goTo(PRODUCTS.BACKPACK.id);
         });
 
         test('SDQA-37: Add product from Product Details Page', async () => {
@@ -129,7 +128,7 @@ test.describe('Shopping Cart', () => {
 
             catalogPage = new CatalogPage(page);
             const product = catalogPage.getProductCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
             await expect(product.addToCartButton).not.toBeVisible();
             await expect(product.removeButton).toBeVisible();
@@ -148,15 +147,15 @@ test.describe('Shopping Cart', () => {
             await expect(cartWithSingleItem.productList).toBeVisible();
 
             const item = cartWithSingleItem.getCartItemCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
-            await expect(item.name).toContainText('Sauce Labs Backpack');
+            await expect(item.name).toContainText(PRODUCTS.BACKPACK.name);
             await expect(item.description).toContainText(
-                'carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.'
+                PRODUCTS.BACKPACK.description
             );
             const quantity = await item.getQuantity();
             expect(quantity).toBe('1');
-            await expect(item.price).toContainText('$29.99');
+            await expect(item.price).toContainText(PRODUCTS.BACKPACK.price);
             await expect(item.removeButton).toBeVisible();
         });
 
@@ -166,12 +165,12 @@ test.describe('Shopping Cart', () => {
             await expect(cartWithSingleItem.productList).toBeVisible();
 
             const item = cartWithSingleItem.getCartItemCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
 
             await item.removeFromCart();
             await expect(
-                cartWithSingleItem.getCartItemCardByName('Sauce Labs Backpack')
+                cartWithSingleItem.getCartItemCardByName(PRODUCTS.BACKPACK.name)
                     .root
             ).not.toBeVisible();
             await expect(header.cartIconBadge).not.toBeVisible();
@@ -184,7 +183,7 @@ test.describe('Shopping Cart', () => {
             await expect(cartWithSingleItem.productList).toBeVisible();
 
             const item = cartWithSingleItem.getCartItemCardByName(
-                'Sauce Labs Backpack'
+                PRODUCTS.BACKPACK.name
             );
             const expectedName = await item.name.innerText();
             const expectedDescription = await item.description.innerText();

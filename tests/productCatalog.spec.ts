@@ -4,6 +4,7 @@ import { ProductDetailsPage } from '../pages/productDetailsPage';
 import { Header } from '../components/header';
 import { ProductCard } from '../components/productCard';
 import { isSortedAscending, isSortedDescending } from '../utils/sorting';
+import { PRODUCTS } from '../test-data/products';
 
 test.describe('Product Catalog', () => {
     let catalogPage: CatalogPage;
@@ -101,7 +102,9 @@ test.describe('Product Catalog', () => {
     );
 
     test('SDQA-28: Navigate to product details page', async ({ page }) => {
-        const product = catalogPage.getProductCardByName('Sauce Labs Backpack');
+        const product = catalogPage.getProductCardByName(
+            PRODUCTS.BACKPACK.name
+        );
         const expectedName = await product.name.innerText();
         const expectedDescription = await product.description.innerText();
         const expectedPrice = await product.price.innerText();
