@@ -1,23 +1,17 @@
-import { test, expect } from "@playwright/test"
-import { LoginPage } from "../pages/loginPage";
-import { CatalogPage } from "../pages/catalogPage";
+import { test, expect } from '../fixtures/index';
+import { CatalogPage } from '../pages/catalogPage';
 import { ProductDetailsPage } from '../pages/productDetailsPage';
 import { Header } from '../components/header';
-import { ProductCard } from "../components/productCard";
-import { isSortedAscending, isSortedDescending } from "../utils/sorting";
+import { ProductCard } from '../components/productCard';
+import { isSortedAscending, isSortedDescending } from '../utils/sorting';
 
 test.describe('Product Catalog', () => {
-    let loginPage: LoginPage;
     let catalogPage: CatalogPage;
 
-    test.beforeEach(async ({page}) => {
-        loginPage = new LoginPage(page);
-        await loginPage.goTo();
-        await loginPage.login('standard_user', 'secret_sauce');
-
+    test.beforeEach(async ({ loggedInPage, page }) => {
         catalogPage = new CatalogPage(page);
         await catalogPage.goTo();
-    })
+    });
 
     test('SDQA-22: View product catalog', async ({ page }) => {
         const header = new Header(page);
@@ -26,7 +20,7 @@ test.describe('Product Catalog', () => {
         const count = await catalogPage.productCards.count();
         expect(count).toBeGreaterThan(0);
 
-        for(let i = 0; i < count; i++){
+        for (let i = 0; i < count; i++) {
             const card = new ProductCard(catalogPage.productCards.nth(i));
 
             await expect(card.image).toBeVisible();
@@ -39,7 +33,7 @@ test.describe('Product Catalog', () => {
         await expect(catalogPage.sortDropdown).toHaveValue('az');
         const productNames = await catalogPage.getProductNames();
         expect(isSortedAscending(productNames)).toBe(true);
-    })
+    });
 
     test('SDQA-23: Sort products by price (low to high)', async ({ page }) => {
         await expect(catalogPage.sortDropdown).toBeVisible();
@@ -48,7 +42,7 @@ test.describe('Product Catalog', () => {
 
         await expect(catalogPage.sortDropdown).toHaveValue('lohi');
         expect(isSortedAscending(productPrices)).toBe(true);
-    })
+    });
 
     test('SDQA-24: Sort products by price (high to low)', async ({ page }) => {
         await expect(catalogPage.sortDropdown).toBeVisible();
@@ -57,19 +51,22 @@ test.describe('Product Catalog', () => {
 
         await expect(catalogPage.sortDropdown).toHaveValue('hilo');
         expect(isSortedDescending(productPrices)).toBe(true);
-    })
+    });
 
-    test('SDQA-25: Sort products by name (A to Z) | Default option', async ({ page }) => {
+    test('SDQA-25: Sort products by name (A to Z) | Default option', async ({
+        page,
+    }) => {
         await expect(catalogPage.sortDropdown).toBeVisible();
         await expect(catalogPage.sortDropdown).toHaveValue('az');
-        
+
         const productNames = await catalogPage.getProductNames();
         expect(isSortedAscending(productNames)).toBe(true);
 
         await catalogPage.selectSortOption('az');
         await expect(catalogPage.sortDropdown).toHaveValue('az');
-        expect(isSortedAscending(productNames)).toBe(true);
-    })
+        const updatedNames = await catalogPage.getProductNames();
+        expect(isSortedAscending(updatedNames)).toBe(true);
+    });
 
     test('SDQA-26: Sort products by name (Z to A)', async ({ page }) => {
         await expect(catalogPage.sortDropdown).toBeVisible();
@@ -78,23 +75,30 @@ test.describe('Product Catalog', () => {
 
         await expect(catalogPage.sortDropdown).toHaveValue('za');
         expect(isSortedDescending(productNames)).toBe(true);
-    })
+    });
 
-    test.fail('SDQA-27: Refresh page preserves applied sort', async ({ page }) => {
-        test.info().annotations.push({ type: 'bug', description: 'SDQA-123' });
- 
-        await expect(catalogPage.sortDropdown).toBeVisible();
-        await catalogPage.selectSortOption('hilo');
-        const productPrices = await catalogPage.getProductPrices();
+    test.fail(
+        'SDQA-27: Refresh page preserves applied sort',
+        async ({ page }) => {
+            test.info().annotations.push({
+                type: 'bug',
+                description: 'SDQA-123',
+            });
 
-        await expect(catalogPage.sortDropdown).toHaveValue('hilo');
-        expect(isSortedDescending(productPrices)).toBe(true);
-    
-        await page.reload();
+            await expect(catalogPage.sortDropdown).toBeVisible();
+            await catalogPage.selectSortOption('hilo');
+            const productPrices = await catalogPage.getProductPrices();
 
-        await expect(catalogPage.sortDropdown).toHaveValue('hilo');
-        expect(isSortedDescending(productPrices)).toBe(true);
-    })
+            await expect(catalogPage.sortDropdown).toHaveValue('hilo');
+            expect(isSortedDescending(productPrices)).toBe(true);
+
+            await page.reload();
+
+            await expect(catalogPage.sortDropdown).toHaveValue('hilo');
+            const updatedPrices = await catalogPage.getProductPrices();
+            expect(isSortedDescending(updatedPrices)).toBe(true);
+        }
+    );
 
     test('SDQA-28: Navigate to product details page', async ({ page }) => {
         const product = catalogPage.getProductCardByName('Sauce Labs Backpack');
@@ -112,5 +116,5 @@ test.describe('Product Catalog', () => {
         await expect(detailsPage.description).toHaveText(expectedDescription);
         await expect(detailsPage.price).toHaveText(expectedPrice);
         await expect(detailsPage.image).toHaveAttribute('src', expectedImage);
-    })
-})
+    });
+});

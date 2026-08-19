@@ -7,8 +7,8 @@ export class Header {
     readonly cartIconBadge: Locator;
 
     constructor(page: Page) {
-        this.burgerMenuButton = page.getByRole('button', {name: 'Open Menu'});
-        this.logoutLink = page.getByRole('link', {name: 'Logout'});
+        this.burgerMenuButton = page.getByRole('button', { name: 'Open Menu' });
+        this.logoutLink = page.getByRole('link', { name: 'Logout' });
         this.cartIcon = page.getByTestId('shopping-cart-link');
         this.cartIconBadge = page.getByTestId('shopping-cart-badge');
     }
@@ -16,7 +16,7 @@ export class Header {
     async openMenu() {
         await this.burgerMenuButton.click();
     }
-    async logout(){
+    async logout() {
         await this.openMenu();
         await this.logoutLink.click();
     }

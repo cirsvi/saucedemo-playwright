@@ -1,4 +1,4 @@
-import {Page, Locator} from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 
 export class ProductDetailsPage {
     readonly page: Page;
@@ -16,16 +16,24 @@ export class ProductDetailsPage {
         this.description = page.getByTestId('inventory-item-desc');
         this.price = page.getByTestId('inventory-item-price');
         this.image = page.locator('.inventory_details_img');
-        this.addToCartButton = page.getByRole('button', { name: 'Add to cart' });
+        this.addToCartButton = page.getByRole('button', {
+            name: 'Add to cart',
+        });
         this.removeButton = page.getByRole('button', { name: 'Remove' });
-        this.backToProductsButton = page.getByRole('button', { name: 'Back to products' });
+        this.backToProductsButton = page.getByRole('button', {
+            name: 'Back to products',
+        });
     }
 
-    async addToCart(){
+    async goTo(id: number) {
+        await this.page.goto(`inventory-item.html?id=${id}`);
+    }
+
+    async addToCart() {
         await this.addToCartButton.click();
     }
 
-    async removeFromCart(){
+    async removeFromCart() {
         await this.removeButton.click();
     }
 
