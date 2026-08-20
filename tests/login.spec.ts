@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
 import { CatalogPage } from '../pages/catalogPage';
+import { ERRORS } from '../test-data/errors';
 
 test.describe('Login', () => {
     let loginPage: LoginPage;
@@ -22,7 +23,7 @@ test.describe('Login', () => {
         await loginPage.login('standard_user1', 'secret_sauce1');
 
         await expect(loginPage.errorMessage).toContainText(
-            'Username and password do not match any user in this service'
+            ERRORS.INVALID_CREDENTIALS
         );
         await expect(loginPage.usernameInput).toHaveClass(/error/);
         await expect(loginPage.passwordInput).toHaveClass(/error/);
@@ -33,7 +34,7 @@ test.describe('Login', () => {
         await loginPage.login('', 'secret_sauce');
 
         await expect(loginPage.errorMessage).toContainText(
-            'Username is required'
+            ERRORS.USERNAME_REQUIRED
         );
         await expect(loginPage.usernameInput).toHaveClass(/error/);
         await expect(page).toHaveURL(/\/$/);
@@ -43,7 +44,7 @@ test.describe('Login', () => {
         await loginPage.login('standard_user', '');
 
         await expect(loginPage.errorMessage).toContainText(
-            'Password is required'
+            ERRORS.PASSWORD_REQUIRED
         );
         await expect(loginPage.passwordInput).toHaveClass(/error/);
         await expect(page).toHaveURL(/\/$/);
@@ -53,7 +54,7 @@ test.describe('Login', () => {
         await loginPage.login('', '');
 
         await expect(loginPage.errorMessage).toContainText(
-            'Username is required'
+            ERRORS.USERNAME_REQUIRED
         );
         await expect(loginPage.usernameInput).toHaveClass(/error/);
         await expect(loginPage.passwordInput).toHaveClass(/error/);
@@ -64,7 +65,7 @@ test.describe('Login', () => {
         await loginPage.login('locked_out_user', 'secret_sauce');
 
         await expect(loginPage.errorMessage).toContainText(
-            'Sorry, this user has been locked out.'
+            ERRORS.LOCKED_OUT_USER
         );
         await expect(loginPage.usernameInput).toHaveClass(/error/);
         await expect(loginPage.passwordInput).toHaveClass(/error/);
