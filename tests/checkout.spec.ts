@@ -8,6 +8,8 @@ import {
     fillAndVerify,
     expectValidationError,
 } from '../utils/checkoutInfoHelper';
+import * as fs from 'fs';
+import * as path from 'path';
 
 test.describe('Checkout', () => {
     test.describe('From Cart Page', () => {
@@ -240,7 +242,6 @@ test.describe('Checkout', () => {
         test.fail(
             'SDQA-103: Server-side: Zip code input really long string',
             async ({ checkoutInfo, page }) => {
-                
                 test.info().annotations.push({
                     type: 'bug',
                     description: 'SDQA-127',
@@ -389,9 +390,12 @@ test.describe('Checkout', () => {
             await completedCheckout.generatePDFOrder();
             const download = await downloadPDFPromise;
 
-            await download.saveAs(
-                `./order_reports/${download.suggestedFilename()}`
-            );
+            const dir = path.join(process.cwd(), 'order-reports');
+            fs.mkdirSync(dir, { recursive: true });
+
+            const saveFilename = path.basename(download.suggestedFilename());
+            const filePath = path.join(dir, saveFilename);
+            await download.saveAs(filePath);
 
             expect(download.suggestedFilename()).toContain('.pdf');
         });

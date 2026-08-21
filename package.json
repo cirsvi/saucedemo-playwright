@@ -14,5 +14,9 @@
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0",
     "prettier": "3.9.6"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
   }
 }
