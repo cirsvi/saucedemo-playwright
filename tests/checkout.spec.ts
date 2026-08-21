@@ -4,6 +4,10 @@ import { CUSTOMER } from '../test-data/customer';
 import { ERRORS } from '../test-data/errors';
 import { CheckoutItemCard } from '../components/checkoutItemCard';
 import { CheckoutCompletePage } from '../pages/checkoutCompletePage';
+import {
+    fillAndVerify,
+    expectValidationError,
+} from '../utils/checkoutInfoHelper';
 
 test.describe('Checkout', () => {
     test.describe('From Cart Page', () => {
@@ -42,22 +46,13 @@ test.describe('Checkout', () => {
             checkoutInfo,
             page,
         }) => {
-            await checkoutInfo.fillInForm(
+            await fillAndVerify(
+                checkoutInfo,
                 CUSTOMER.STANDARD.firstName,
                 CUSTOMER.STANDARD.lastName,
                 CUSTOMER.STANDARD.zipCode
             );
-            await expect(checkoutInfo.firstNameInput).toHaveValue(
-                CUSTOMER.STANDARD.firstName
-            );
-            await expect(checkoutInfo.lastNameInput).toHaveValue(
-                CUSTOMER.STANDARD.lastName
-            );
-            await expect(checkoutInfo.zipCodeInput).toHaveValue(
-                CUSTOMER.STANDARD.zipCode
-            );
 
-            await checkoutInfo.continueCheckout();
             await expect(page).toHaveURL(/\/checkout-step-two\.html/);
         });
 
@@ -65,75 +60,57 @@ test.describe('Checkout', () => {
             checkoutInfo,
             page,
         }) => {
-            await checkoutInfo.fillInForm(
+            await fillAndVerify(
+                checkoutInfo,
                 '',
                 CUSTOMER.STANDARD.lastName,
                 CUSTOMER.STANDARD.zipCode
             );
-            await expect(checkoutInfo.firstNameInput).toBeEmpty();
-            await expect(checkoutInfo.lastNameInput).toHaveValue(
-                CUSTOMER.STANDARD.lastName
-            );
-            await expect(checkoutInfo.zipCodeInput).toHaveValue(
-                CUSTOMER.STANDARD.zipCode
-            );
 
-            await checkoutInfo.continueCheckout();
-            await expect(checkoutInfo.errorMessage).toContainText(
-                ERRORS.FIRST_NAME_REQUIRED
+            await expectValidationError(
+                checkoutInfo,
+                page,
+                ERRORS.FIRST_NAME_REQUIRED,
+                checkoutInfo.firstNameInput
             );
-            await expect(checkoutInfo.firstNameInput).toHaveClass(/error/);
-            await expect(page).toHaveURL(/\/checkout-step-one\.html/);
         });
 
         test('SDQA-83: Server-side: Last name is required input field', async ({
             checkoutInfo,
             page,
         }) => {
-            await checkoutInfo.fillInForm(
+            await fillAndVerify(
+                checkoutInfo,
                 CUSTOMER.STANDARD.firstName,
                 '',
                 CUSTOMER.STANDARD.zipCode
             );
-            await expect(checkoutInfo.firstNameInput).toHaveValue(
-                CUSTOMER.STANDARD.firstName
-            );
-            await expect(checkoutInfo.lastNameInput).toBeEmpty();
-            await expect(checkoutInfo.zipCodeInput).toHaveValue(
-                CUSTOMER.STANDARD.zipCode
-            );
 
-            await checkoutInfo.continueCheckout();
-            await expect(checkoutInfo.errorMessage).toContainText(
-                ERRORS.LAST_NAME_REQUIRED
+            await expectValidationError(
+                checkoutInfo,
+                page,
+                ERRORS.LAST_NAME_REQUIRED,
+                checkoutInfo.lastNameInput
             );
-            await expect(checkoutInfo.lastNameInput).toHaveClass(/error/);
-            await expect(page).toHaveURL(/\/checkout-step-one\.html/);
         });
 
         test('SDQA-84: Server-side: Zip code is required input field', async ({
             checkoutInfo,
             page,
         }) => {
-            await checkoutInfo.fillInForm(
+            await fillAndVerify(
+                checkoutInfo,
                 CUSTOMER.STANDARD.firstName,
                 CUSTOMER.STANDARD.lastName,
                 ''
             );
-            await expect(checkoutInfo.firstNameInput).toHaveValue(
-                CUSTOMER.STANDARD.firstName
-            );
-            await expect(checkoutInfo.lastNameInput).toHaveValue(
-                CUSTOMER.STANDARD.lastName
-            );
-            await expect(checkoutInfo.zipCodeInput).toBeEmpty();
 
-            await checkoutInfo.continueCheckout();
-            await expect(checkoutInfo.errorMessage).toContainText(
-                ERRORS.ZIP_CODE_REQUIRED
+            await expectValidationError(
+                checkoutInfo,
+                page,
+                ERRORS.ZIP_CODE_REQUIRED,
+                checkoutInfo.zipCodeInput
             );
-            await expect(checkoutInfo.zipCodeInput).toHaveClass(/error/);
-            await expect(page).toHaveURL(/\/checkout-step-one\.html/);
         });
 
         test.fail(
@@ -144,25 +121,19 @@ test.describe('Checkout', () => {
                     description: 'SDQA-128',
                 });
 
-                await checkoutInfo.fillInForm(
+                await fillAndVerify(
+                    checkoutInfo,
                     '@&$^@%',
                     CUSTOMER.STANDARD.lastName,
                     CUSTOMER.STANDARD.zipCode
                 );
-                await expect(checkoutInfo.firstNameInput).toHaveValue('@&$^@%');
-                await expect(checkoutInfo.lastNameInput).toHaveValue(
-                    CUSTOMER.STANDARD.lastName
-                );
-                await expect(checkoutInfo.zipCodeInput).toHaveValue(
-                    CUSTOMER.STANDARD.zipCode
-                );
 
-                await checkoutInfo.continueCheckout();
-                await expect(checkoutInfo.errorMessage).toContainText(
-                    ERRORS.FIRST_NAME_SPECIAL_CHARS
+                await expectValidationError(
+                    checkoutInfo,
+                    page,
+                    ERRORS.FIRST_NAME_SPECIAL_CHARS,
+                    checkoutInfo.firstNameInput
                 );
-                await expect(checkoutInfo.firstNameInput).toHaveClass(/error/);
-                await expect(page).toHaveURL(/\/checkout-step-one\.html/);
             }
         );
 
@@ -174,25 +145,19 @@ test.describe('Checkout', () => {
                     description: 'SDQA-129',
                 });
 
-                await checkoutInfo.fillInForm(
+                await fillAndVerify(
+                    checkoutInfo,
                     CUSTOMER.STANDARD.firstName,
                     '@&$^@%',
                     CUSTOMER.STANDARD.zipCode
                 );
-                await expect(checkoutInfo.firstNameInput).toHaveValue(
-                    CUSTOMER.STANDARD.firstName
-                );
-                await expect(checkoutInfo.lastNameInput).toHaveValue('@&$^@%');
-                await expect(checkoutInfo.zipCodeInput).toHaveValue(
-                    CUSTOMER.STANDARD.zipCode
-                );
 
-                await checkoutInfo.continueCheckout();
-                await expect(checkoutInfo.errorMessage).toContainText(
-                    ERRORS.LAST_NAME_SPECIAL_CHARS
+                await expectValidationError(
+                    checkoutInfo,
+                    page,
+                    ERRORS.LAST_NAME_SPECIAL_CHARS,
+                    checkoutInfo.lastNameInput
                 );
-                await expect(checkoutInfo.lastNameInput).toHaveClass(/error/);
-                await expect(page).toHaveURL(/\/checkout-step-one\.html/);
             }
         );
 
@@ -204,25 +169,19 @@ test.describe('Checkout', () => {
                     description: 'SDQA-130',
                 });
 
-                await checkoutInfo.fillInForm(
+                await fillAndVerify(
+                    checkoutInfo,
                     CUSTOMER.STANDARD.firstName,
                     CUSTOMER.STANDARD.lastName,
                     '@&$^@%'
                 );
-                await expect(checkoutInfo.firstNameInput).toHaveValue(
-                    CUSTOMER.STANDARD.firstName
-                );
-                await expect(checkoutInfo.lastNameInput).toHaveValue(
-                    CUSTOMER.STANDARD.lastName
-                );
-                await expect(checkoutInfo.zipCodeInput).toHaveValue('@&$^@%');
 
-                await checkoutInfo.continueCheckout();
-                await expect(checkoutInfo.errorMessage).toContainText(
-                    ERRORS.ZIP_CODE_SPECIAL_CHARS
+                await expectValidationError(
+                    checkoutInfo,
+                    page,
+                    ERRORS.ZIP_CODE_SPECIAL_CHARS,
+                    checkoutInfo.zipCodeInput
                 );
-                await expect(checkoutInfo.zipCodeInput).toHaveClass(/error/);
-                await expect(page).toHaveURL(/\/checkout-step-one\.html/);
             }
         );
 
@@ -238,27 +197,19 @@ test.describe('Checkout', () => {
                     description: 'SDQA-128',
                 });
 
-                await checkoutInfo.fillInForm(
+                await fillAndVerify(
+                    checkoutInfo,
                     'a'.repeat(200),
                     CUSTOMER.STANDARD.lastName,
                     CUSTOMER.STANDARD.zipCode
                 );
-                await expect(checkoutInfo.firstNameInput).toHaveValue(
-                    'a'.repeat(200)
-                );
-                await expect(checkoutInfo.lastNameInput).toHaveValue(
-                    CUSTOMER.STANDARD.lastName
-                );
-                await expect(checkoutInfo.zipCodeInput).toHaveValue(
-                    CUSTOMER.STANDARD.zipCode
-                );
 
-                await checkoutInfo.continueCheckout();
-                await expect(checkoutInfo.errorMessage).toContainText(
-                    ERRORS.FIRST_NAME_MAX_LEN
+                await expectValidationError(
+                    checkoutInfo,
+                    page,
+                    ERRORS.FIRST_NAME_MAX_LEN,
+                    checkoutInfo.firstNameInput
                 );
-                await expect(checkoutInfo.firstNameInput).toHaveClass(/error/);
-                await expect(page).toHaveURL(/\/checkout-step-one\.html/);
             }
         );
 
@@ -270,59 +221,44 @@ test.describe('Checkout', () => {
                     description: 'SDQA-126',
                 });
 
-                await checkoutInfo.fillInForm(
+                await fillAndVerify(
+                    checkoutInfo,
                     CUSTOMER.STANDARD.firstName,
                     'a'.repeat(200),
                     CUSTOMER.STANDARD.zipCode
                 );
-                await expect(checkoutInfo.firstNameInput).toHaveValue(
-                    CUSTOMER.STANDARD.firstName
-                );
-                await expect(checkoutInfo.lastNameInput).toHaveValue(
-                    'a'.repeat(200)
-                );
-                await expect(checkoutInfo.zipCodeInput).toHaveValue(
-                    CUSTOMER.STANDARD.zipCode
-                );
 
-                await checkoutInfo.continueCheckout();
-                await expect(checkoutInfo.errorMessage).toContainText(
-                    ERRORS.LAST_NAME_MAX_LEN
+                await expectValidationError(
+                    checkoutInfo,
+                    page,
+                    ERRORS.LAST_NAME_MAX_LEN,
+                    checkoutInfo.lastNameInput
                 );
-                await expect(checkoutInfo.lastNameInput).toHaveClass(/error/);
-                await expect(page).toHaveURL(/\/checkout-step-one\.html/);
             }
         );
 
         test.fail(
             'SDQA-103: Server-side: Zip code input really long string',
             async ({ checkoutInfo, page }) => {
+                
                 test.info().annotations.push({
                     type: 'bug',
                     description: 'SDQA-127',
                 });
 
-                await checkoutInfo.fillInForm(
+                await fillAndVerify(
+                    checkoutInfo,
                     CUSTOMER.STANDARD.firstName,
                     CUSTOMER.STANDARD.lastName,
                     'a'.repeat(200)
                 );
-                await expect(checkoutInfo.firstNameInput).toHaveValue(
-                    CUSTOMER.STANDARD.firstName
-                );
-                await expect(checkoutInfo.lastNameInput).toHaveValue(
-                    CUSTOMER.STANDARD.lastName
-                );
-                await expect(checkoutInfo.zipCodeInput).toHaveValue(
-                    'a'.repeat(200)
-                );
 
-                await checkoutInfo.continueCheckout();
-                await expect(checkoutInfo.errorMessage).toContainText(
-                    ERRORS.ZIP_CODE_MAX_LEN
+                await expectValidationError(
+                    checkoutInfo,
+                    page,
+                    ERRORS.ZIP_CODE_MAX_LEN,
+                    checkoutInfo.zipCodeInput
                 );
-                await expect(checkoutInfo.zipCodeInput).toHaveClass(/error/);
-                await expect(page).toHaveURL(/\/checkout-step-one\.html/);
             }
         );
 
@@ -404,10 +340,12 @@ test.describe('Checkout', () => {
                     ''
                 )
             );
-            const total = parseFloat((await checkoutOverview.totalPrice.innerText()).replace(
-                'Total: $',
-                ''
-            ));
+            const total = parseFloat(
+                (await checkoutOverview.totalPrice.innerText()).replace(
+                    'Total: $',
+                    ''
+                )
+            );
             expect(total).toBeCloseTo(subtotal + tax, 2);
         });
 
@@ -420,7 +358,9 @@ test.describe('Checkout', () => {
 
             const checkoutCompletePage = new CheckoutCompletePage(page);
             await expect(checkoutCompletePage.completeHeader).toBeVisible();
-            await expect(checkoutCompletePage.completeHeader).toContainText('Thank you for your order!');
+            await expect(checkoutCompletePage.completeHeader).toContainText(
+                'Thank you for your order!'
+            );
         });
     });
 
