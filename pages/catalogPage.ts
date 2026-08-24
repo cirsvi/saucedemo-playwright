@@ -16,7 +16,7 @@ export class CatalogPage {
         this.activeOption = page.getByTestId('active-option');
     }
 
-    async goTo() {
+    async goTo(): Promise<void> {
         await this.page.goto('/inventory.html');
     }
 
@@ -27,7 +27,9 @@ export class CatalogPage {
         return new ProductCard(card);
     }
 
-    async selectSortOption(option: 'az' | 'za' | 'lohi' | 'hilo') {
+    async selectSortOption(
+        option: 'az' | 'za' | 'lohi' | 'hilo'
+    ): Promise<void> {
         await this.sortDropdown.selectOption(option);
     }
 

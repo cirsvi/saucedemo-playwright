@@ -25,19 +25,19 @@ export class ProductDetailsPage {
         });
     }
 
-    async goTo(id: number) {
+    async goTo(id: number): Promise<void> {
         await this.page.goto(`inventory-item.html?id=${id}`);
     }
 
-    async addToCart() {
+    async addToCart(): Promise<void> {
         await this.addToCartButton.click();
     }
 
-    async removeFromCart() {
+    async removeFromCart(): Promise<void> {
         await this.removeButton.click();
     }
 
-    async goBackToProducts() {
+    async goBackToProducts(): Promise<void> {
         await this.backToProductsButton.click();
     }
 }

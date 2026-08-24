@@ -34,11 +34,11 @@ export class CheckoutOverviewPage {
         return new CheckoutItemCard(card);
     }
 
-    async cancleCheckout() {
+    async cancleCheckout(): Promise<void> {
         await this.cancelButton.click();
     }
 
-    async finishCheckout() {
+    async finishCheckout(): Promise<void> {
         await this.finishButton.click();
     }
 }

@@ -1,10 +1,16 @@
 import { test as base } from '@playwright/test';
 import { loggedInPage } from './auth';
-import { cartWithSingleItem } from './cartItems';
-import { checkoutInfo } from './checkoutInfo';
-import { cartWithNoItem } from './cartNoItems';
-import { checkoutOverview } from './checkoutOverview';
-import { completedCheckout } from './completedCheckout';
+import { cartWithNoItem, cartWithSingleItem, cartWithTwoItems } from './cart';
+import {
+    checkoutInfoWithOneItem,
+    checkoutOverviewWithOneItem,
+    completedCheckoutWithOneItem,
+} from './checkoutOneItem';
+import {
+    checkoutInfoWithTwoItems,
+    checkoutOverviewWithTwoItems,
+    completedCheckoutWithTwoItems,
+} from './checkoutTwoItems';
 import { LoginPage } from '../pages/loginPage';
 import { CartPage } from '../pages/cartPage';
 import { CheckoutInformationPage } from '../pages/checkoutInformationPage';
@@ -15,18 +21,26 @@ type MyFixtures = {
     loggedInPage: LoginPage;
     cartWithNoItem: CartPage;
     cartWithSingleItem: CartPage;
-    checkoutInfo: CheckoutInformationPage;
-    checkoutOverview: CheckoutOverviewPage;
-    completedCheckout: CheckoutCompletePage;
+    cartWithTwoItems: CartPage;
+    checkoutInfoWithOneItem: CheckoutInformationPage;
+    checkoutInfoWithTwoItems: CheckoutInformationPage;
+    checkoutOverviewWithOneItem: CheckoutOverviewPage;
+    checkoutOverviewWithTwoItems: CheckoutOverviewPage;
+    completedCheckoutWithOneItem: CheckoutCompletePage;
+    completedCheckoutWithTwoItems: CheckoutCompletePage;
 };
 
 export const test = base.extend<MyFixtures>({
     loggedInPage,
     cartWithNoItem,
     cartWithSingleItem,
-    checkoutInfo,
-    checkoutOverview,
-    completedCheckout,
+    cartWithTwoItems,
+    checkoutInfoWithOneItem,
+    checkoutInfoWithTwoItems,
+    checkoutOverviewWithOneItem,
+    checkoutOverviewWithTwoItems,
+    completedCheckoutWithOneItem,
+    completedCheckoutWithTwoItems,
 });
 
 export { expect } from '@playwright/test';

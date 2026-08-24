@@ -22,8 +22,7 @@ test.describe('Logout', () => {
     }) => {
         await header.logout();
 
-        const catalogPage = new CatalogPage(page);
-        await catalogPage.goTo();
+        await page.goto('/inventory.html');
 
         await expect(loggedInPage.errorMessage).toContainText(
             "You can only access '/inventory.html' when you are logged in."

@@ -17,10 +17,10 @@ export class CheckoutCompletePage {
         });
     }
 
-    async generatePDFOrder() {
+    async generatePDFOrder(): Promise<void> {
         await this.generatePDFOrderButton.click();
     }
-    async goBackHome() {
+    async goBackHome(): Promise<void> {
         await this.backHomeButton.click();
     }
 }

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
 import { CatalogPage } from '../pages/catalogPage';
+import { getBackgroundColor } from '../utils/getBgColor';
 import { ERRORS } from '../test-data/errors';
 
 test.describe('Login', () => {
@@ -25,8 +26,8 @@ test.describe('Login', () => {
         await expect(loginPage.errorMessage).toContainText(
             ERRORS.INVALID_CREDENTIALS
         );
-        await expect(loginPage.usernameInput).toHaveClass(/error/);
-        await expect(loginPage.passwordInput).toHaveClass(/error/);
+        await expect(loginPage.usernameInput).toHaveClass(/\berror\b/);
+        await expect(loginPage.passwordInput).toHaveClass(/\berror\b/);
         await expect(page).toHaveURL(/\/$/);
     });
 
@@ -36,7 +37,7 @@ test.describe('Login', () => {
         await expect(loginPage.errorMessage).toContainText(
             ERRORS.USERNAME_REQUIRED
         );
-        await expect(loginPage.usernameInput).toHaveClass(/error/);
+        await expect(loginPage.usernameInput).toHaveClass(/\berror\b/);
         await expect(page).toHaveURL(/\/$/);
     });
 
@@ -46,7 +47,7 @@ test.describe('Login', () => {
         await expect(loginPage.errorMessage).toContainText(
             ERRORS.PASSWORD_REQUIRED
         );
-        await expect(loginPage.passwordInput).toHaveClass(/error/);
+        await expect(loginPage.passwordInput).toHaveClass(/\berror\b/);
         await expect(page).toHaveURL(/\/$/);
     });
 
@@ -56,8 +57,8 @@ test.describe('Login', () => {
         await expect(loginPage.errorMessage).toContainText(
             ERRORS.USERNAME_REQUIRED
         );
-        await expect(loginPage.usernameInput).toHaveClass(/error/);
-        await expect(loginPage.passwordInput).toHaveClass(/error/);
+        await expect(loginPage.usernameInput).toHaveClass(/\berror\b/);
+        await expect(loginPage.passwordInput).toHaveClass(/\berror\b/);
         await expect(page).toHaveURL(/\/$/);
     });
 
@@ -67,8 +68,8 @@ test.describe('Login', () => {
         await expect(loginPage.errorMessage).toContainText(
             ERRORS.LOCKED_OUT_USER
         );
-        await expect(loginPage.usernameInput).toHaveClass(/error/);
-        await expect(loginPage.passwordInput).toHaveClass(/error/);
+        await expect(loginPage.usernameInput).toHaveClass(/\berror\b/);
+        await expect(loginPage.passwordInput).toHaveClass(/\berror\b/);
         await expect(page).toHaveURL(/\/$/);
     });
 
@@ -98,27 +99,65 @@ test.describe('Login', () => {
         }
     );
 
-    test.fixme('SDQA-16: Tab navigation', async () => {
-        // Known bug: no clear UX/UI for tab navigation
-        // Bug: SDQA-118
-        // Steps:
-        // 1. User presses the "Tab" key once.
-        // Expected: The cursor/focus moves to the "Username" field. A visual highlight border appears.
-        // 2. User presses the Tab key again (2nd time).
-        // Expected: The cursor/focus moves to the "Password" field. A visual highlight border appears.
-        // 3. User presses the Tab key again (3rd time).
-        // Expected: The cursor/focus moves to the "Login" button. The button is visually highlighted.
+    test.fail('SDQA-16: Tab navigation', async ({ page }) => {
+        test.info().annotations.push({
+            type: 'bug',
+            description: 'SDQA-118',
+        });
+
+        await page.keyboard.press('Tab');
+        await expect(loginPage.usernameInput).toBeFocused();
+        await expect(loginPage.usernameInput).not.toHaveCSS(
+            'outline-style',
+            'none'
+        );
+
+        await page.keyboard.press('Tab');
+        await expect(loginPage.passwordInput).toBeFocused();
+        await expect(loginPage.passwordInput).not.toHaveCSS(
+            'outline-style',
+            'none'
+        );
+        const normalBg = await getBackgroundColor(loginPage.loginButton);
+        await page.keyboard.press('Tab');
+        await expect(loginPage.loginButton).toBeFocused();
+        await expect(loginPage.loginButton).not.toHaveCSS('background-color', normalBg);
     });
 
-    test.fixme('SDQA-18: Mouse interaction', async () => {
-        // Known bug: no clear UX/UI for mouse interactions
-        // Bug: SDQA-119
-        // Steps:
-        // 1.User clicks on the "Username" input field field.
-        // Expected: The "Username" input field is selected and has a visible visual highlight.
-        // 2. User clicks on the "Password" input field field.
-        // Expected: The "Password" input field is selected and has a visible visual highlight.
-        // 3. User hovers using mouse over the "Login" button.
-        // Expected: The button changes its appearance by a distinct color; the cursor visibly changes to hand to indicate possible action.
+    test.fail('SDQA-18: Mouse interaction', async () => {
+        test.info().annotations.push({
+            type: 'bug',
+            description: 'SDQA-119',
+        });
+
+        await loginPage.usernameInput.click();
+        await expect(loginPage.usernameInput).toBeFocused();
+        await expect(loginPage.usernameInput).not.toHaveCSS(
+            'outline-style',
+            'none'
+        );
+
+        await loginPage.passwordInput.click();
+        await expect(loginPage.passwordInput).toBeFocused();
+        await expect(loginPage.passwordInput).not.toHaveCSS(
+            'outline-style',
+            'none'
+        );
+
+        const normalBg = await getBackgroundColor(loginPage.loginButton);
+        await loginPage.loginButton.hover();
+        await expect(loginPage.loginButton).toHaveCSS('cursor', 'pointer');
+        await expect(loginPage.loginButton).not.toHaveCSS('background-color', normalBg);
+    });
+
+    test('SDQA-137: Closing error message clears message and input highlight', async () => {
+        await loginPage.login('standard_user1', 'secret_sauce1');
+        await expect(loginPage.errorMessage).toBeVisible();
+
+        await loginPage.closeError();
+
+        await expect(loginPage.usernameInput).not.toHaveClass(/\berror\b/);
+        await expect(loginPage.passwordInput).not.toHaveClass(/\berror\b/);
+        await expect(loginPage.errorMessage).not.toBeVisible();
     });
 });

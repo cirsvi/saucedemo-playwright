@@ -18,7 +18,7 @@ export class CartPage {
         this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
     }
 
-    async goTo() {
+    async goTo(): Promise<void> {
         await this.page.goto('/cart.html');
     }
 
@@ -30,16 +30,16 @@ export class CartPage {
         return new CartItemCard(card);
     }
 
-    async removeItem(name: string) {
+    async removeItem(name: string): Promise<void> {
         const item = this.getCartItemCardByName(name);
         await item.removeFromCart();
     }
 
-    async continueShopping() {
+    async continueShopping(): Promise<void> {
         await this.continueShoppingButton.click();
     }
 
-    async proceedToCheckout() {
+    async proceedToCheckout(): Promise<void> {
         await this.checkoutButton.click();
     }
 }
