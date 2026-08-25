@@ -1,5 +1,11 @@
 # :gear: SauceDemo Playwright Automation
 
+<div align="center">
+
+[![CI](https://github.com/cirsvi/saucedemo-playwright/actions/workflows/playwright.yml/badge.svg)](https://github.com/cirsvi/saucedemo-playwright/actions/workflows/playwright.yml) [![Playwright](https://img.shields.io/badge/Playwright-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Node.js](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](https://nodejs.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
+
 ## Overview
 
 This repository contains an automated test suite for the SauceDemo e-commerce application using **Playwright** and **TypeScript**.
