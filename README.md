@@ -6,8 +6,10 @@ This repository contains an automated test suite for the SauceDemo e-commerce ap
 
 This project complements the **[SauceDemo Manual Testing](https://github.com/cirsvi/saucedemo-manual-qa)** repository (for more details, see **[Manual Testing](#manual-testing)**). Every automated test is mapped to a manual test case ID to preserve traceability across both projects. The project follows **Page Object Model (POM)** design pattern and uses custom fixtures and utilities to keep tests maintainable and readable.
 
-The GIF below shows an example of the Playwright HTML report after a full test run (all tests executed as expected, including known expected failures):
-![Example of Playwright HTML report](evidence/playwright-report.gif)
+<p align="center">
+  <img src="evidence/playwright-report.gif" alt="Example of Playwright HTML report"><br>
+  <em>Playwright HTML report after a full test run (all tests executed as expected)</em>
+</p>
 
 ## Test Coverage
 
