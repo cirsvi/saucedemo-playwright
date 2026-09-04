@@ -8,7 +8,7 @@ import {
 import { getBackgroundColor } from '../../utils/getBgColor';
 
 test.describe('Checkout | From Checkout: Your Information Page', () => {
-    test('SDQA-74: Cancel from Information Page', async ({
+    test('@checkout-regression SDQA-74: Cancel from Information Page', async ({
         checkoutInfoWithOneItem,
         page,
     }) => {
@@ -16,7 +16,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
         await expect(page).toHaveURL(/\/cart\.html/);
     });
 
-    test('SDQA-82: Successful checkout with valid information', async ({
+    test('@smoke @checkout-regression SDQA-82: Successful checkout with valid information', async ({
         checkoutInfoWithOneItem,
         page,
     }) => {
@@ -30,7 +30,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
         await expect(page).toHaveURL(/\/checkout-step-two\.html/);
     });
 
-    test('SDQA-141: Submit checkout information with all fields empty', async ({
+    test('@regression-expansion SDQA-141: Submit checkout information with all fields empty', async ({
         checkoutInfoWithOneItem,
         page,
     }) => {
@@ -51,7 +51,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
         await expect(page).toHaveURL(/\/checkout-step-one\.html/);
     });
 
-    test('SDQA-81: Server-side: First name is required input field', async ({
+    test('@checkout-regression SDQA-81: Server-side: First name is required input field', async ({
         checkoutInfoWithOneItem,
         page,
     }) => {
@@ -70,7 +70,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
         );
     });
 
-    test('SDQA-83: Server-side: Last name is required input field', async ({
+    test('@checkout-regression SDQA-83: Server-side: Last name is required input field', async ({
         checkoutInfoWithOneItem,
         page,
     }) => {
@@ -89,7 +89,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
         );
     });
 
-    test('SDQA-84: Server-side: Zip code is required input field', async ({
+    test('@checkout-regression SDQA-84: Server-side: Zip code is required input field', async ({
         checkoutInfoWithOneItem,
         page,
     }) => {
@@ -109,7 +109,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
     });
 
     test.fail(
-        'SDQA-89: Server-side: First name input does not accept special characters',
+        '@checkout-regression SDQA-89: Server-side: First name input does not accept special characters',
         async ({ checkoutInfoWithOneItem, page }) => {
             test.info().annotations.push({
                 type: 'bug',
@@ -133,7 +133,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
     );
 
     test.fail(
-        'SDQA-93: Server-side: Last name input does not accept special characters',
+        '@checkout-regression SDQA-93: Server-side: Last name input does not accept special characters',
         async ({ checkoutInfoWithOneItem, page }) => {
             test.info().annotations.push({
                 type: 'bug',
@@ -157,7 +157,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
     );
 
     test.fail(
-        'SDQA-94: Server-side: Zip Code input does not accept special characters',
+        '@checkout-regression SDQA-94: Server-side: Zip Code input does not accept special characters',
         async ({ checkoutInfoWithOneItem, page }) => {
             test.info().annotations.push({
                 type: 'bug',
@@ -181,7 +181,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
     );
 
     test.fail(
-        'SDQA-101: Server-side: First name input really long string',
+        '@checkout-regression SDQA-101: Server-side: First name input really long string',
         async ({ checkoutInfoWithOneItem, page }) => {
             test.info().annotations.push({
                 type: 'bug',
@@ -209,7 +209,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
     );
 
     test.fail(
-        'SDQA-102: Server-side: Last name input really long string',
+        '@checkout-regression SDQA-102: Server-side: Last name input really long string',
         async ({ checkoutInfoWithOneItem, page }) => {
             test.info().annotations.push({
                 type: 'bug',
@@ -233,7 +233,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
     );
 
     test.fail(
-        'SDQA-103: Server-side: Zip code input really long string',
+        '@checkout-regression SDQA-103: Server-side: Zip code input really long string',
         async ({ checkoutInfoWithOneItem, page }) => {
             test.info().annotations.push({
                 type: 'bug',
@@ -256,7 +256,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
         }
     );
 
-    test('SDQA-139: Closing error message clears message and input highlight', async ({
+    test('@regression-expansion SDQA-139: Closing error message clears message and input highlight', async ({
         checkoutInfoWithOneItem,
     }) => {
         await checkoutInfoWithOneItem.continueCheckout();
@@ -277,7 +277,7 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
     });
 
     test.fail(
-        'SDQA-112: Mouse interactions on Information Page',
+        '@checkout-regression SDQA-112: Mouse interactions on Information Page',
         async ({ checkoutInfoWithOneItem }) => {
             test.info().annotations.push({
                 type: 'bug',
@@ -333,53 +333,53 @@ test.describe('Checkout | From Checkout: Your Information Page', () => {
         }
     );
 
-    test.fail('SDQA-113: Tab navigation on Information Page', async ({
-        checkoutInfoWithOneItem,
-        page,
-    }) => {
-        test.info().annotations.push({
-            type: 'bug',
-            description: 'SDQA-132',
-        });
+    test.fail(
+        '@checkout-regression SDQA-113: Tab navigation on Information Page',
+        async ({ checkoutInfoWithOneItem, page }) => {
+            test.info().annotations.push({
+                type: 'bug',
+                description: 'SDQA-132',
+            });
 
-        await page.keyboard.press('Tab');
-        await page.keyboard.press('Tab');
-        await expect(checkoutInfoWithOneItem.firstNameInput).toBeFocused();
-        await expect(checkoutInfoWithOneItem.firstNameInput).not.toHaveCSS(
-            'outline-style',
-            'none'
-        );
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+            await expect(checkoutInfoWithOneItem.firstNameInput).toBeFocused();
+            await expect(checkoutInfoWithOneItem.firstNameInput).not.toHaveCSS(
+                'outline-style',
+                'none'
+            );
 
-        await page.keyboard.press('Tab');
-        await expect(checkoutInfoWithOneItem.lastNameInput).toBeFocused();
-        await expect(checkoutInfoWithOneItem.lastNameInput).not.toHaveCSS(
-            'outline-style',
-            'none'
-        );
+            await page.keyboard.press('Tab');
+            await expect(checkoutInfoWithOneItem.lastNameInput).toBeFocused();
+            await expect(checkoutInfoWithOneItem.lastNameInput).not.toHaveCSS(
+                'outline-style',
+                'none'
+            );
 
-        await page.keyboard.press('Tab');
-        await expect(checkoutInfoWithOneItem.zipCodeInput).toBeFocused();
-        await expect(checkoutInfoWithOneItem.zipCodeInput).not.toHaveCSS(
-            'outline-style',
-            'none'
-        );
+            await page.keyboard.press('Tab');
+            await expect(checkoutInfoWithOneItem.zipCodeInput).toBeFocused();
+            await expect(checkoutInfoWithOneItem.zipCodeInput).not.toHaveCSS(
+                'outline-style',
+                'none'
+            );
 
-        const standardBgCancel = await getBackgroundColor(
-            checkoutInfoWithOneItem.cancelButton
-        );
-        await page.keyboard.press('Tab');
-        await expect(checkoutInfoWithOneItem.cancelButton).not.toHaveCSS(
-            'background-color',
-            standardBgCancel
-        );
+            const standardBgCancel = await getBackgroundColor(
+                checkoutInfoWithOneItem.cancelButton
+            );
+            await page.keyboard.press('Tab');
+            await expect(checkoutInfoWithOneItem.cancelButton).not.toHaveCSS(
+                'background-color',
+                standardBgCancel
+            );
 
-        const standardBgContinue = await getBackgroundColor(
-            checkoutInfoWithOneItem.continueButton
-        );
-        await page.keyboard.press('Tab');
-        await expect(checkoutInfoWithOneItem.continueButton).not.toHaveCSS(
-            'background-color',
-            standardBgContinue
-        );
-    });
+            const standardBgContinue = await getBackgroundColor(
+                checkoutInfoWithOneItem.continueButton
+            );
+            await page.keyboard.press('Tab');
+            await expect(checkoutInfoWithOneItem.continueButton).not.toHaveCSS(
+                'background-color',
+                standardBgContinue
+            );
+        }
+    );
 });

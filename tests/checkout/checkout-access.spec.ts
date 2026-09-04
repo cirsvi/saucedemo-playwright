@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures/index';
 
-test.describe('Checkout | Direct URL access restrictions', () => {
+test.describe('Checkout | Direct URL access restrictions @regression-expansion', () => {
     test.fail(
         'SDQA-146: Checkout information page is not accessible with empty cart via URL',
         async ({ cartWithNoItem, page }) => {

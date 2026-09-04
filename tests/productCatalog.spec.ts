@@ -6,7 +6,7 @@ import { ProductCard } from '../components/productCard';
 import { isSortedAscending, isSortedDescending } from '../utils/sorting';
 import { PRODUCTS } from '../test-data/products';
 
-test.describe('Product Catalog', () => {
+test.describe('Product Catalog @product-catalog-regression', () => {
     let catalogPage: CatalogPage;
 
     test.beforeEach(async ({ loggedInPage, page }) => {
@@ -14,7 +14,7 @@ test.describe('Product Catalog', () => {
         await catalogPage.goTo();
     });
 
-    test('SDQA-22: View product catalog', async ({ page }) => {
+    test('@smoke SDQA-22: View product catalog', async ({ page }) => {
         const header = new Header(page);
         await expect(header.cartIcon).toBeVisible();
 
@@ -101,7 +101,7 @@ test.describe('Product Catalog', () => {
         }
     );
 
-    test('SDQA-28: Navigate to product details page', async ({ page }) => {
+    test('@smoke SDQA-28: Navigate to product details page', async ({ page }) => {
         const product = catalogPage.getProductCardByName(
             PRODUCTS.BACKPACK.name
         );

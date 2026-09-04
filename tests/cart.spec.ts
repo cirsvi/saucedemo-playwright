@@ -4,7 +4,7 @@ import { ProductDetailsPage } from '../pages/productDetailsPage';
 import { Header } from '../components/header';
 import { PRODUCTS } from '../test-data/products';
 
-test.describe('Shopping Cart', () => {
+test.describe('Shopping Car @cart-regression', () => {
     let catalogPage: CatalogPage;
     let detailsPage: ProductDetailsPage;
     let header: Header;
@@ -19,7 +19,7 @@ test.describe('Shopping Cart', () => {
             await catalogPage.goTo();
         });
 
-        test('SDQA-36: Add product from Catalog Page', async () => {
+        test('@smoke SDQA-36: Add product from Catalog Page', async () => {
             const product = catalogPage.getProductCardByName(
                 PRODUCTS.BACKPACK.name
             );
@@ -81,7 +81,7 @@ test.describe('Shopping Cart', () => {
             await expect(refreshedProduct.addToCartButton).not.toBeVisible();
         });
 
-        test('SDQA-62: Access cart page from Catalog Page', async ({
+        test('@smoke SDQA-62: Access cart page from Catalog Page', async ({
             page,
         }) => {
             await header.cartIcon.click();

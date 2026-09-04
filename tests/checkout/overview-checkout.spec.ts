@@ -4,7 +4,7 @@ import { CheckoutCompletePage } from '../../pages/checkoutCompletePage';
 import { getItemPriceSum } from '../../utils/getItemPriceSum';
 
 test.describe('Checkout | From Checkout: Overview Page', () => {
-    test('SDQA-77: Cancel from Overview Page', async ({
+    test('@checkout-regression SDQA-77: Cancel from Overview Page', async ({
         checkoutOverviewWithOneItem,
         page,
     }) => {
@@ -12,7 +12,7 @@ test.describe('Checkout | From Checkout: Overview Page', () => {
         await expect(page).toHaveURL(/\/inventory\.html/);
     });
 
-    test('SDQA-104: Overview page content', async ({
+    test('@checkout-regression SDQA-104: Overview page content', async ({
         checkoutOverviewWithTwoItems,
     }) => {
         await expect(checkoutOverviewWithTwoItems.productList).toBeVisible();
@@ -42,7 +42,7 @@ test.describe('Checkout | From Checkout: Overview Page', () => {
         await expect(checkoutOverviewWithTwoItems.totalPrice).toBeVisible();
     });
 
-    test('SDQA-143: Subtotal (item total) amount is calculated correctly', async ({
+    test('@regression-expansion SDQA-143: Subtotal (item total) amount is calculated correctly', async ({
         checkoutOverviewWithTwoItems,
     }) => {
         await expect(checkoutOverviewWithTwoItems.productList).toBeVisible();
@@ -54,7 +54,7 @@ test.describe('Checkout | From Checkout: Overview Page', () => {
         );
     });
 
-    test('SDQA-144: Tax amount is calculated correctly', async ({
+    test('@regression-expansion SDQA-144: Tax amount is calculated correctly', async ({
         checkoutOverviewWithTwoItems,
     }) => {
         const expectedSubtotal = parseFloat(
@@ -66,7 +66,7 @@ test.describe('Checkout | From Checkout: Overview Page', () => {
         );
     });
 
-    test('SDQA-145: Total amount is calculated correctly', async ({
+    test('@regression-expansion SDQA-145: Total amount is calculated correctly', async ({
         checkoutOverviewWithTwoItems,
     }) => {
         await expect(checkoutOverviewWithTwoItems.productList).toBeVisible();
@@ -81,7 +81,7 @@ test.describe('Checkout | From Checkout: Overview Page', () => {
         );
     });
 
-    test('SDQA-105: Complete purchase', async ({
+    test('@smoke @checkout-regression SDQA-105: Complete purchase', async ({
         checkoutOverviewWithTwoItems,
         page,
     }) => {

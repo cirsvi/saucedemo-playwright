@@ -1,7 +1,7 @@
 import { test, expect } from '../../fixtures/index';
 
-test.describe('Checkout | From Cart Page', () => {
-    test('SDQA-71: Access from Cart Page', async ({
+test.describe('Checkout | From Cart Page @checkout-regression', () => {
+    test('@smoke SDQA-71: Access from Cart Page', async ({
         cartWithSingleItem,
         page,
     }) => {

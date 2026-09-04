@@ -91,6 +91,8 @@ The Playwright configuration is defined in `playwright.config.ts`. Key settings 
     ```
 
 ### Test Execution
+
+#### Run the Full Suite
 Run the full suite headlessly:
 ```bash
 npx playwright test
@@ -100,6 +102,27 @@ Or run with the Playwright UI mode:
 npx playwright test --ui
 ```
 
+#### Run by Test Set
+
+The automated tests are tagged to mirror the manual test sets. Using `--grep` it is possible to run the tests that belong to a specific set, for example:
+```bash
+npx playwright test --grep "@smoke"
+```
+
+
+**Available tags** (each links to its manual test set):
+| Tag                          | Manual Test Set |
+|------------------------------|-----------------|
+| `@smoke`                     | [Smoke Test Set](https://github.com/cirsvi/saucedemo-manual-qa/blob/main/test-sets/SDQA-19-smoke.md) |
+| `@login-regression`          | [Login Regression Test Set](https://github.com/cirsvi/saucedemo-manual-qa/blob/main/test-sets/SDQA-20-login-regression.md) |
+| `@product-catalog-regression`| [Product Catalog Regression Test Set](https://github.com/cirsvi/saucedemo-manual-qa/blob/main/test-sets/SDQA-34-product-catalog-regression.md) |
+| `@logout-regression`         | [Logout Regression Test Set](https://github.com/cirsvi/saucedemo-manual-qa/blob/main/test-sets/SDQA-55-logout-regression.md) |
+| `@cart-regression`           | [Shopping Cart Regression Test Set](https://github.com/cirsvi/saucedemo-manual-qa/blob/main/test-sets/SDQA-49-shopping-cart-regression.md) |
+| `@checkout-regression`       | [Checkout Regression Test Set](https://github.com/cirsvi/saucedemo-manual-qa/blob/main/test-sets/SDQA-110-checkout-regression.md) |
+| `@regression-expansion`      | [Login & Checkout Expansion Test Set](https://github.com/cirsvi/saucedemo-manual-qa/blob/main/test-sets/SDQA-151-regression-expansion.md) |
+
+> [!TIP]
+> It is possible to **combine tags** with `--grep` using `|` (pipe), for example, `--grep "@smoke|@login-regression"`. It is also possible to **exclude tags** with `--grep-invert`, for example, `--grep-invert "@regression-expansion"`. 
 
 ## Continuous Integration (CI)
 This project uses **GitHub Actions** for CI. The workflow (`.github/workflows/playwright.yml`, named **"SauceDemo E2E Tests"**) triggers on every `push` and `pull` request to the `main` branch.
@@ -107,27 +130,32 @@ This project uses **GitHub Actions** for CI. The workflow (`.github/workflows/pl
 The CI pipeline installs dependencies and browsers, runs the full Playwright suite, and uploads generated HTML report as an artifact.
 
 ## Project Structure
-- `.github/workflows/`: GitHub Actions CI pipeline definitions.
-- `components/`: Reusable UI fragments (if any).
-- `fixtures/`: Playwright custom fixtures for common test setup.
-- `pages/`: Page Object Model classes representing application pages.
-- `test-data/`: Static test data (customers, error messages, products).
-- `tests/`: Test spec files grouped by feature.
-    - `login.spec.ts`
-    - `logout.spec.ts`
-    - `productCatalog.spec.ts`
-    - `cart.spec.ts`
-    - `checkout/` – Checkout tests split by sub‑feature:
-        - `cart-checkout.spec.ts`
-        - `checkout-access.spec.ts`
-        - `information-checkout.spec.ts`
-        - `overview-checkout.spec.ts`
-        - `complete-checkout.spec.ts`
-- `utils/`: Helper functions for background color retrieval, price sum calculation, sorting verification, etc.
-- `.prettierrc`: Prettier configuration file.
-- `playwright.config.ts`: Playwright configuration.
-- `package.json` / `package-lock.json`: Project dependencies and scripts.
+- **`.github/workflows/`**: GitHub Actions CI pipeline definitions.
+- **`components/`**: Reusable UI fragments (if any).
+- **`fixtures/`**: Playwright custom fixtures for common test setup.
+- **`pages/`**: Page Object Model classes representing application pages.
+- **`test-data/`**: Static test data (customers, error messages, products).
+- **`tests/`**: Test spec files grouped by feature.
+    - **`login.spec.ts`**
+    - **`logout.spec.ts`**
+    - **`productCatalog.spec.ts`**
+    - **`cart.spec.ts`**
+    - **`checkout/`**: Checkout tests split by sub‑feature:
+        - **`cart-checkout.spec.ts`**
+        - **`checkout-access.spec.ts`**
+        - **`information-checkout.spec.ts`**
+        - **`overview-checkout.spec.ts`**
+        - **`complete-checkout.spec.ts`**
+- **`utils/`**: Helper functions for background color retrieval, price sum calculation, sorting verification, etc.
+- **`.prettierrc`**: Prettier configuration file.
+- **`playwright.config.ts`**: Playwright configuration.
+- **`package.json`**/ **`package-lock.json`**: Project dependencies and scripts.
 
 ## Manual Testing
 
 This automation project is built on top of the manual test suite documented in **[SauceDemo Manual Testing](https://github.com/cirsvi/saucedemo-manual-qa)**. The manual repository contains user stories, test cases, execution reports, and bug reports. The automation covers all 62 manual test cases and follows the same feature grouping for consistency.
+
+Each automated test is also **tagged with one or more tags** for selective execution and traceability to the **[Manual Testing](https://github.com/cirsvi/saucedemo-manual-qa)** repository. The tags correspond exactly to the test sets defined in the manual project.
+
+> [!NOTE]
+> Tests that belong to multiple sets carry multiple tags, for example, a smoke test that is also part of the shopping cart regression will have both `@smoke` and `@cart-regression` in its title.

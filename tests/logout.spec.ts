@@ -2,14 +2,14 @@ import { test, expect } from '../fixtures/index';
 import { CatalogPage } from '../pages/catalogPage';
 import { Header } from '../components/header';
 
-test.describe('Logout', () => {
+test.describe('Logout @logout-regression', () => {
     let header: Header;
 
     test.beforeEach(async ({ page }) => {
         header = new Header(page);
     });
 
-    test('SDQA-52: Successfull logout', async ({ loggedInPage, page }) => {
+    test('@smoke SDQA-52: Successfull logout', async ({ loggedInPage, page }) => {
         await header.logout();
 
         await expect(page).toHaveURL(/\/$/);

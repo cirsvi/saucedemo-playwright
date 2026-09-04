@@ -12,7 +12,7 @@ test.describe('Login', () => {
         await loginPage.goTo();
     });
 
-    test('SDQA-3: Input valid credentials', async ({ page }) => {
+    test('@smoke @login-regression SDQA-3: Input valid credentials', async ({ page }) => {
         await loginPage.login('standard_user', 'secret_sauce');
 
         const catalogPage = new CatalogPage(page);
@@ -20,7 +20,7 @@ test.describe('Login', () => {
         await expect(catalogPage.inventoryList).toBeVisible();
     });
 
-    test('SDQA-6: Input invalid credentials', async ({ page }) => {
+    test('@login-regression SDQA-6: Input invalid credentials', async ({ page }) => {
         await loginPage.login('standard_user1', 'secret_sauce1');
 
         await expect(loginPage.errorMessage).toContainText(
@@ -31,7 +31,7 @@ test.describe('Login', () => {
         await expect(page).toHaveURL(/\/$/);
     });
 
-    test('SDQA-9: Empty username field', async ({ page }) => {
+    test('@login-regression SDQA-9: Empty username field', async ({ page }) => {
         await loginPage.login('', 'secret_sauce');
 
         await expect(loginPage.errorMessage).toContainText(
@@ -41,7 +41,7 @@ test.describe('Login', () => {
         await expect(page).toHaveURL(/\/$/);
     });
 
-    test('SDQA-10: Empty password field', async ({ page }) => {
+    test('@login-regression SDQA-10: Empty password field', async ({ page }) => {
         await loginPage.login('standard_user', '');
 
         await expect(loginPage.errorMessage).toContainText(
@@ -51,7 +51,7 @@ test.describe('Login', () => {
         await expect(page).toHaveURL(/\/$/);
     });
 
-    test('SDQA-11: Both input fields empty', async ({ page }) => {
+    test('@login-regression SDQA-11: Both input fields empty', async ({ page }) => {
         await loginPage.login('', '');
 
         await expect(loginPage.errorMessage).toContainText(
@@ -62,7 +62,7 @@ test.describe('Login', () => {
         await expect(page).toHaveURL(/\/$/);
     });
 
-    test('SDQA-12: Locked out user', async ({ page }) => {
+    test('@login-regression SDQA-12: Locked out user', async ({ page }) => {
         await loginPage.login('locked_out_user', 'secret_sauce');
 
         await expect(loginPage.errorMessage).toContainText(
@@ -74,7 +74,7 @@ test.describe('Login', () => {
     });
 
     test.fail(
-        'SDQA-13: Client-side: Username input really long string',
+        '@login-regression SDQA-13: Client-side: Username input really long string',
         async () => {
             test.info().annotations.push({
                 type: 'bug',
@@ -87,7 +87,7 @@ test.describe('Login', () => {
     );
 
     test.fail(
-        'SDQA-14: Client-side: Password input really long string',
+        '@login-regression SDQA-14: Client-side: Password input really long string',
         async () => {
             test.info().annotations.push({
                 type: 'bug',
@@ -99,7 +99,7 @@ test.describe('Login', () => {
         }
     );
 
-    test.fail('SDQA-16: Tab navigation', async ({ page }) => {
+    test.fail('@login-regression SDQA-16: Tab navigation', async ({ page }) => {
         test.info().annotations.push({
             type: 'bug',
             description: 'SDQA-118',
@@ -124,7 +124,7 @@ test.describe('Login', () => {
         await expect(loginPage.loginButton).not.toHaveCSS('background-color', normalBg);
     });
 
-    test.fail('SDQA-18: Mouse interaction', async () => {
+    test.fail('@login-regression SDQA-18: Mouse interaction', async () => {
         test.info().annotations.push({
             type: 'bug',
             description: 'SDQA-119',
@@ -150,7 +150,7 @@ test.describe('Login', () => {
         await expect(loginPage.loginButton).not.toHaveCSS('background-color', normalBg);
     });
 
-    test('SDQA-137: Closing error message clears message and input highlight', async () => {
+    test('@regression-expansion SDQA-137: Closing error message clears message and input highlight', async () => {
         await loginPage.login('standard_user1', 'secret_sauce1');
         await expect(loginPage.errorMessage).toBeVisible();
 
